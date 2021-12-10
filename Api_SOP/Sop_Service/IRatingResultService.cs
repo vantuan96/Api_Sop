@@ -11,5 +11,6 @@ namespace Api_SOP.Sop_Service
     public interface IRatingResultService
     {
         Task<ActionResult<MessageReport>> Create(RatingResult value);
+        Task<User> GetByUsername(string username);
     }
 }

@@ -32,7 +32,6 @@ namespace Api_SOP.Controllers.API
         {
             var result = new MessageReport(false, "Có lỗi xảy ra");
 
-           
 
             try
             {
@@ -44,9 +43,6 @@ namespace Api_SOP.Controllers.API
                     result = new MessageReport(false, "Tài khoản không tồn tại");
                     return await Task.FromResult(result);
                 }
-
-
-
 
 
                 if (objUser.User_PassWord != pass)
