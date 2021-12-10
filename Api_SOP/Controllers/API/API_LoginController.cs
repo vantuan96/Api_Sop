@@ -62,7 +62,7 @@ namespace Api_SOP.Controllers.API
                 }
 
 
-                result = new MessageReport(true, objUser.User_UserName +  objUser.User_PassWord);
+                result = new MessageReport(true, "Thành công");
             }
             catch (System.Exception ex)
             {

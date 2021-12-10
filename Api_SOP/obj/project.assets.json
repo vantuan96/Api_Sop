@@ -8520,11 +8520,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Bird\\Api_SOP\\Api_SOP\\Api_SOP.csproj",
+      "projectUniqueName": "D:\\Bird\\ApiSop\\Api_SOP\\Api_SOP.csproj",
       "projectName": "Api_SOP",
-      "projectPath": "D:\\Bird\\Api_SOP\\Api_SOP\\Api_SOP.csproj",
+      "projectPath": "D:\\Bird\\ApiSop\\Api_SOP\\Api_SOP.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\Bird\\Api_SOP\\Api_SOP\\obj\\",
+      "outputPath": "D:\\Bird\\ApiSop\\Api_SOP\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
