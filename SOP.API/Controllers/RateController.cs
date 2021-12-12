@@ -26,7 +26,7 @@ namespace SOP.API.Controllers
             {
                 return result = new MessageReport(check, "thêm thành công");
             }
-            //sdfgh
+            //syyyy
             else
             {
                 return result = new MessageReport(false, "Lỗi");
