@@ -13,5 +13,16 @@ namespace SOP.Shared.Models
         public string Message { get; set; }
 
         public Exception Exception { get; set; }
+        public MessageReport()
+        {
+
+        }
+
+        public MessageReport(bool isSuccess, string Message)
+        {
+            this.Succeeded = isSuccess;
+            this.Message = Message;
+        }
     }
 }
+

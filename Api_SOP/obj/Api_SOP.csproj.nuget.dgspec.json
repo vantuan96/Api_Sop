@@ -1,24 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "F:\\mrb\\Api_SOP\\Api_SOP\\Api_SOP.csproj": {}
+    "H:\\Api_Sop\\Api_SOP\\Api_SOP.csproj": {}
   },
   "projects": {
-    "F:\\mrb\\Api_SOP\\Api_SOP\\Api_SOP.csproj": {
+    "H:\\Api_Sop\\Api_SOP\\Api_SOP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "F:\\mrb\\Api_SOP\\Api_SOP\\Api_SOP.csproj",
+        "projectUniqueName": "H:\\Api_Sop\\Api_SOP\\Api_SOP.csproj",
         "projectName": "Api_SOP",
-        "projectPath": "F:\\mrb\\Api_SOP\\Api_SOP\\Api_SOP.csproj",
-        "packagesPath": "C:\\Users\\DELLPRECISION7510\\.nuget\\packages\\",
-        "outputPath": "F:\\mrb\\Api_SOP\\Api_SOP\\obj\\",
+        "projectPath": "H:\\Api_Sop\\Api_SOP\\Api_SOP.csproj",
+        "packagesPath": "C:\\Users\\AD\\.nuget\\packages\\",
+        "outputPath": "H:\\Api_Sop\\Api_SOP\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "d:\\Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\DELLPRECISION7510\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\AD\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -112,7 +111,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.401\\RuntimeIdentifierGraph.json"
         }
       }
     }

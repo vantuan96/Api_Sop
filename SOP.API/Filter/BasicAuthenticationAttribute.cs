@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SOP.API.LibaryHelper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -27,16 +28,12 @@ namespace SOP.API.Filter
                 var password = usernamePasswordArray[1];
 
                 // Replace this with your own system of security / means of validating credentials
-                var isValid = userName == "admin" && password == "password";
+                var isValid = FunctionHelper.LoginExist(userName, password);
 
                 if (isValid)
                 {
                     var principal = new GenericPrincipal(new GenericIdentity(userName), null);
                     Thread.CurrentPrincipal = principal;
-
-                    actionContext.Response =
-                       actionContext.Request.CreateResponse(HttpStatusCode.OK,
-                          "User " + userName + " successfully authenticated");
 
                     return;
                 }

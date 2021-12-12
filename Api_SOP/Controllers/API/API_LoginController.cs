@@ -74,15 +74,6 @@ namespace Api_SOP.Controllers.API
 
 
         }
-        private async Task<User> GetByUsername(string username)
-        {
-            var connect = AppSettingHelper.GetStringFromFileJson("connectstring", "ConnectionStrings:DefaultConnection").Result;
-
-            var sb = new StringBuilder();
-            sb.AppendLine("Select * from [User] ");
-            sb.AppendLine(string.Format("Where User_UserName = '{0}'", username));
-            var obj = SqlHelper.ExcuteCommandToModel<User>(connect, sb.ToString());
-            return await Task.FromResult(obj);
-        }
+       
     }
 }
