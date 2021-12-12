@@ -43,7 +43,7 @@ namespace SOP.API.Controllers
             ////Kiểm tra tks
             var dt = UserService.GetByUsername(loginModel.Username);
 
-            var pass = FunctionHelper.Encrypt(loginModel.Password, true);
+            var pass = FunctionHelper.Encrypt(loginModel.Password);
            
 
             var usre_pass = dt.Rows[0]["User_PassWord"].ToString();

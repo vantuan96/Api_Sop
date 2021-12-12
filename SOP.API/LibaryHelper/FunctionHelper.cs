@@ -11,30 +11,9 @@ namespace SOP.API.LibaryHelper
     public class FunctionHelper
     {
 
-        public static string Encrypt(string toEncrypt, bool useHashing)
+        public static string Encrypt(string pass  )
         {
-            byte[] keyArray;
-            byte[] toEncryptArray = UTF8Encoding.UTF8.GetBytes(toEncrypt);
-
-            string key = "17032008";
-            if (useHashing)
-            {
-                MD5CryptoServiceProvider hashmd5 = new MD5CryptoServiceProvider();
-                keyArray = hashmd5.ComputeHash(UTF8Encoding.UTF8.GetBytes(key));
-                hashmd5.Clear();
-            }
-            else
-                keyArray = UTF8Encoding.UTF8.GetBytes(key);
-
-            TripleDESCryptoServiceProvider tdes = new TripleDESCryptoServiceProvider();
-            tdes.Key = keyArray;
-            tdes.Mode = CipherMode.ECB;
-            tdes.Padding = PaddingMode.PKCS7;
-
-            ICryptoTransform cTransform = tdes.CreateEncryptor();
-            byte[] resultArray = cTransform.TransformFinalBlock(toEncryptArray, 0, toEncryptArray.Length);
-            tdes.Clear();
-            return Convert.ToBase64String(resultArray, 0, resultArray.Length);
+            return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(pass.Trim(), "MD5");
         }
         public static bool LoginExist(string UserName, string PassWord)
         {
@@ -44,7 +23,7 @@ namespace SOP.API.LibaryHelper
             var dt = UserService.GetByUsername(UserName);
             if (dt != null)
             {
-                var pass = FunctionHelper.Encrypt(PassWord, true);
+                var pass = FunctionHelper.Encrypt(PassWord);
                 var usre_pass = dt.Rows[0]["User_PassWord"].ToString();
                 if (usre_pass == pass)
                     return check = true;

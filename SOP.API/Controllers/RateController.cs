@@ -10,7 +10,7 @@ using System.Web.Http;
 
 namespace SOP.API.Controllers
 {
-    [AllowAnonymous]
+
     [BasicAuthentication]
     public class RateController : ApiController
     {

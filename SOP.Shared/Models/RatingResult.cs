@@ -8,7 +8,7 @@ namespace SOP.Shared.Models
 {
    public class RatingResult
     {
-        public int RatingResult_Id { get; set; }
+      
 
         public string RatingResult_UserId { get; set; }
 
@@ -16,8 +16,6 @@ namespace SOP.Shared.Models
 
         public string RatingResult_RatingId { get; set; }
 
-        public string Username { get; set; }
-
-        public string Password { get; set; }
+       
     }
 }
