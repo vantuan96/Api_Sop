@@ -10,11 +10,11 @@ namespace SOP.Shared.Models
     {
       
 
-        public string RatingResult_UserId { get; set; }
+        public int RatingResult_UserId { get; set; } // id của User
 
-        public string RatingResult_CreatedOn { get; set; }
+        public string RatingResult_CreatedOn { get; set; } // Ngày tạo đánh giá
 
-        public string RatingResult_RatingId { get; set; }
+        public int RatingResult_RatingId { get; set; } // id của ratingresult
 
        
     }
