@@ -10,8 +10,7 @@ namespace SOP.API.LibaryHelper
 {
     public class FunctionHelper
     {
-
-        public static string Encrypt(string pass  )
+        public static string Encrypt(string pass)
         {
             return System.Web.Security.FormsAuthentication.HashPasswordForStoringInConfigFile(pass.Trim(), "MD5");
         }

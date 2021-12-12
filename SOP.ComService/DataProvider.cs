@@ -23,6 +23,38 @@ namespace SOP.ComService
             _client = new HttpClient();
         }
 
+        public static async Task<MessageReport> TestAuth()
+        {
+            var report = new MessageReport();
+
+            try
+            {
+                var byteArray = Encoding.UTF8.GetBytes($"{StaticFields.Username}:{StaticFields.Password}");
+
+                var requestMsg = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/testauth")
+                };
+
+                requestMsg.Headers.Authorization
+                     = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+
+                var responseMsg = await _client.SendAsync(requestMsg);
+
+                if (responseMsg.IsSuccessStatusCode)
+                {
+                    report.Succeeded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
+            }
+
+            return report;
+        }
+
         public static async Task<MessageReport> CheckLogin(string id, string pw)
         {
             var report = new MessageReport() { Succeeded = false };
@@ -34,7 +66,7 @@ namespace SOP.ComService
                 var requestMsg = new HttpRequestMessage()
                 {
                     Method = HttpMethod.Post,
-                    Content = new StringContent(JsonConvert.SerializeObject(loginModel)),
+                    Content = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json"),
                     RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/login")
                 };
 

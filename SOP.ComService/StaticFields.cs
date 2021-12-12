@@ -9,6 +9,7 @@ namespace SOP.ComService
     public static class StaticFields
     {
         public static bool isLogOut = false;
+        public static bool isAutorun = false;
         public static string APIURL = "";
         public static string Username = "";
         public static string Password = "";

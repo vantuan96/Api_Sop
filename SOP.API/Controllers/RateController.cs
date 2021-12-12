@@ -14,14 +14,12 @@ namespace SOP.API.Controllers
     [BasicAuthentication]
     public class RateController : ApiController
     {
-        
-       
         [Route("Create")]
         [HttpPost]
-        public MessageReport Post( RatingResult model)
+        public MessageReport Post(RatingResult model)
         {
             var result = new MessageReport(false, "Có lỗi xảy ra");
-                    bool check = RateService.CreatObj(model);
+            bool check = RateService.CreatObj(model);
             if (check)
             {
                 return result = new MessageReport(check, "thêm thành công");

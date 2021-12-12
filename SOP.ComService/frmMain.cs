@@ -25,6 +25,9 @@ namespace SOP.ComService
             InitializeComponent();
             this.Icon = Properties.Resources._6074_brainstorm_bulb_idea_jabber_light_icon;
             Init();
+
+            if (StaticFields.isAutorun)
+                btnStart.PerformClick();
         }
 
         private void Init()
