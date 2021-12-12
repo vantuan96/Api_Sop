@@ -74,6 +74,9 @@ namespace SOP.ComService
 
         private async void btnOK_Click(object sender, EventArgs e)
         {
+            autoLoginTimer.Elapsed -= AutoLoginTimer_Elapsed;
+            autoLoginTimer.Stop();
+
             if (ValidateInfo())
             {
                 StaticFields.APIURL = txtAPI.Text;

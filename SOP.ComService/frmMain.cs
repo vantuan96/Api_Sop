@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using SOP.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,9 +26,6 @@ namespace SOP.ComService
             InitializeComponent();
             this.Icon = Properties.Resources._6074_brainstorm_bulb_idea_jabber_light_icon;
             Init();
-
-            if (StaticFields.isAutorun)
-                btnStart.PerformClick();
         }
 
         private void Init()
@@ -57,6 +55,9 @@ namespace SOP.ComService
         {
             InvokeMethod(() =>
             {
+                if (textBox1.Lines.Count() > 200)
+                    textBox1.Clear();
+
                 textBox1.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)} : {text}");
                 textBox1.AppendText("\r\n");
             });
@@ -151,48 +152,24 @@ namespace SOP.ComService
             ProcessMessage(dataReceived);
         }
 
-        private void ProcessMessage(string message)
+        private async void ProcessMessage(string message)
         {
-            switch (message)
+            var ratingModel = new RatingResult()
             {
-                //Rất Hài Lòng
-                case ("a5b"):
-                    {
-                        Log.Information($"Rated 5");
-                        break;
-                    };
+                RatingResult_UserId = StaticFields.UserId,
+                RatingResult_RatingId = StaticFields.RatingValue[message]
+            };
 
-                //Hài Lòng
-                case ("c4d"):
-                    {
-                        Log.Information($"Rated 4");
-                        break;
-                    };
+            var report = await DataProvider.PushRating(ratingModel);
 
-                //Chờ Lâu
-                case ("e3f"):
-                    {
-                        Log.Information($"Rated 3");
-                        break;
-                    };
+            if (report.Succeeded)
+                Log.Information($"[{ratingModel.RatingResult_UserId}] received rate grade {ratingModel.RatingResult_RatingId}");
+        }
 
-                //Nghiệp vụ kém
-                case ("g2h"):
-                    {
-                        Log.Information($"Rated 2");
-                        break;
-                    };
-
-                //Thái độ lồi lõm
-                case ("i1k"):
-                    {
-                        Log.Information($"Rated 1");
-                        break;
-                    };
-
-                default:
-                    break;
-            }
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            if (StaticFields.isAutorun)
+                btnStart.PerformClick();
         }
     }
 }

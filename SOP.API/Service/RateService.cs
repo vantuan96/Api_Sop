@@ -10,7 +10,6 @@ namespace SOP.API.Service
 {
     public class RateService
     {
-
         public static bool CreatObj(RatingResult value)
         {
             var sb = new StringBuilder();
