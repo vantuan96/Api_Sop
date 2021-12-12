@@ -157,13 +157,51 @@ namespace SOP.ComService
             var ratingModel = new RatingResult()
             {
                 RatingResult_UserId = StaticFields.UserId,
-                RatingResult_RatingId = StaticFields.RatingValue[message]
             };
+
+            StaticFields.RatingValue.TryGetValue(message, out int rating_id);
+
+            if (rating_id == 0)
+            {
+                Log.Error($"Rating error : ({message})");
+                AppendLog($"Rating error : ({message})");
+                return;
+            }
+
+            ratingModel.RatingResult_RatingId = rating_id;
 
             var report = await DataProvider.PushRating(ratingModel);
 
             if (report.Succeeded)
-                Log.Information($"[{ratingModel.RatingResult_UserId}] received rate grade {ratingModel.RatingResult_RatingId}");
+            {
+                var msgRate = $"[{ratingModel.RatingResult_UserId}] received rate grade {GetRatingTextByRatingId(rating_id)}";
+                Log.Information(msgRate);
+                AppendLog(msgRate);
+            }
+        }
+
+        private string GetRatingTextByRatingId(int id)
+        {
+            switch (id)
+            {
+                case 5:
+                    return "Rất hài lòng";
+
+                case 4:
+                    return "Hài lòng";
+
+                case 3:
+                    return "Chờ lâu";
+
+                case 2:
+                    return "Nghiệp vụ kém";
+
+                case 1:
+                    return "Thái độ kém";
+
+                default:
+                    return "";
+            }
         }
 
         private void frmMain_Load(object sender, EventArgs e)

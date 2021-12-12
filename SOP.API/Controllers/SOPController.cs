@@ -48,7 +48,7 @@ namespace SOP.API.Controllers
                 var usre_pass = dt.Rows[0]["User_PassWord"].ToString();
 
                 if (usre_pass == pass)
-                    return Json(dt.Rows[0]["User_Id"].ToString());
+                    return Json(Convert.ToInt32(dt.Rows[0]["User_Id"]));
             }
             catch { }
 
