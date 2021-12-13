@@ -32,7 +32,7 @@ namespace SOP.API.Controllers
             {
                 return result = new MessageReport(check, "thêm thành công");
             }
-            //syyyy
+            
             else
             {
                 return result = new MessageReport(false, "Lỗi");
@@ -40,10 +40,10 @@ namespace SOP.API.Controllers
         }
         [Route("listuser")]
         [HttpGet]
-        public List<User_SOP> GetListUsers(List<int>  userids)
+        public List<User_SOP> GetListUsers(List<int> userids)
         {
             var lst = new List<User_SOP>();
-            
+
             // lấy datatbale user 
             DataTable dt = UserService.GetDtUser();
             // Convert to list
@@ -63,8 +63,10 @@ namespace SOP.API.Controllers
 
                 }
             }
-           ///
+            ///
             return lst;
         }
+
+
     }
 }

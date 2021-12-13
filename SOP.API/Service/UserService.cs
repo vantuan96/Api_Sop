@@ -21,6 +21,14 @@ namespace SOP.API.Service
             return (obj);
         }
 
-       
+
+        public static DataTable GetDtUser()
+        {
+
+            var sb = new StringBuilder();
+            sb.AppendLine("Select * from [User] ");
+            DataTable dt = SqlHelper.GetTable(sb.ToString(), connStr, false);
+            return dt;
+        }
     }
 }
