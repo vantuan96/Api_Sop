@@ -2,7 +2,6 @@
 using SOP.API.LibaryHelper;
 using SOP.API.Service;
 using SOP.Shared.Models;
-using SOP.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +14,7 @@ using System.Web.Http;
 namespace SOP.API.Controllers
 {
     [AllowAnonymous]
- 
+
     public class SOPController : ApiController
     {
         [Route("test")]
@@ -32,32 +31,28 @@ namespace SOP.API.Controllers
         {
             return Ok();
         }
-        
+
         [Route("login")]
         [HttpPost]
         public IHttpActionResult Login(LoginModel loginModel)
         {
-
             var result = new MessageReport(false, "Có lỗi xảy ra");
 
-            ////Kiểm tra tks
-            var dt = UserService.GetByUsername(loginModel.Username);
+            try
+            {
+                ////Kiểm tra tks
+                var dt = UserService.GetByUsername(loginModel.Username);
 
-            var pass = FunctionHelper.Encrypt(loginModel.Password);
-           
+                var pass = FunctionHelper.Encrypt(loginModel.Password);
 
-            var usre_pass = dt.Rows[0]["User_PassWord"].ToString();
+                var usre_pass = dt.Rows[0]["User_PassWord"].ToString();
 
-            if (usre_pass == pass)
-                return Ok();
+                if (usre_pass == pass)
+                    return Json(Convert.ToInt32(dt.Rows[0]["User_Id"]));
+            }
+            catch { }
 
             return Unauthorized();
         }
-
-
-
-
-
-
     }
 }

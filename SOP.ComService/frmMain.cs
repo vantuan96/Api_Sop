@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using SOP.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -54,6 +55,9 @@ namespace SOP.ComService
         {
             InvokeMethod(() =>
             {
+                if (textBox1.Lines.Count() > 200)
+                    textBox1.Clear();
+
                 textBox1.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)} : {text}");
                 textBox1.AppendText("\r\n");
             });
@@ -148,48 +152,62 @@ namespace SOP.ComService
             ProcessMessage(dataReceived);
         }
 
-        private void ProcessMessage(string message)
+        private async void ProcessMessage(string message)
         {
-            switch (message)
+            var ratingModel = new RatingResult()
             {
-                //Rất Hài Lòng
-                case ("a5b"):
-                    {
-                        Log.Information($"Rated 5");
-                        break;
-                    };
+                RatingResult_UserId = StaticFields.UserId,
+            };
 
-                //Hài Lòng
-                case ("c4d"):
-                    {
-                        Log.Information($"Rated 4");
-                        break;
-                    };
+            StaticFields.RatingValue.TryGetValue(message, out int rating_id);
 
-                //Chờ Lâu
-                case ("e3f"):
-                    {
-                        Log.Information($"Rated 3");
-                        break;
-                    };
+            if (rating_id == 0)
+            {
+                Log.Error($"Rating error : ({message})");
+                AppendLog($"Rating error : ({message})");
+                return;
+            }
 
-                //Nghiệp vụ kém
-                case ("g2h"):
-                    {
-                        Log.Information($"Rated 2");
-                        break;
-                    };
+            ratingModel.RatingResult_RatingId = rating_id;
 
-                //Thái độ lồi lõm
-                case ("i1k"):
-                    {
-                        Log.Information($"Rated 1");
-                        break;
-                    };
+            var report = await DataProvider.PushRating(ratingModel);
+
+            if (report.Succeeded)
+            {
+                var msgRate = $"[{ratingModel.RatingResult_UserId}] received rate grade {GetRatingTextByRatingId(rating_id)}";
+                Log.Information(msgRate);
+                AppendLog(msgRate);
+            }
+        }
+
+        private string GetRatingTextByRatingId(int id)
+        {
+            switch (id)
+            {
+                case 5:
+                    return "Rất hài lòng";
+
+                case 4:
+                    return "Hài lòng";
+
+                case 3:
+                    return "Chờ lâu";
+
+                case 2:
+                    return "Nghiệp vụ kém";
+
+                case 1:
+                    return "Thái độ kém";
 
                 default:
-                    break;
+                    return "";
             }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            if (StaticFields.isAutorun)
+                btnStart.PerformClick();
         }
     }
 }

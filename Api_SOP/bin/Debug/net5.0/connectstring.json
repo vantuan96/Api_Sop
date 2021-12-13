@@ -1,6 +1,0 @@
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Data Source=DESKTOP-NHAT11T\\SQLEXPRESS;Initial Catalog=SOP;User Id=sa;Password=12;MultipleActiveResultSets=True",
-    "DefaultType": "SQLSERVER"
-  }
-}

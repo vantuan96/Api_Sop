@@ -74,6 +74,9 @@ namespace SOP.ComService
 
         private async void btnOK_Click(object sender, EventArgs e)
         {
+            autoLoginTimer.Elapsed -= AutoLoginTimer_Elapsed;
+            autoLoginTimer.Stop();
+
             if (ValidateInfo())
             {
                 StaticFields.APIURL = txtAPI.Text;
@@ -83,16 +86,17 @@ namespace SOP.ComService
                 {
                     StaticFields.Username = txtUsername.Text;
                     StaticFields.Password = txtPassword.Text;
+                    StaticFields.APIURL = txtAPI.Text;
 
                     this.DialogResult = DialogResult.OK;
                     SaveLoginData(AppDomain.CurrentDomain.BaseDirectory + "logindata.dat");
-                    Log.Information("Logged Successfully");
+                    Log.Information("Logged in Successfully");
                     this.Close();
                 }
                 else
                 {
                     Log.Information("Login Failed");
-                    MessageBox.Show(report.Message);
+                    MessageBox.Show("Login Failed");
                 }
             }
         }
@@ -161,6 +165,11 @@ namespace SOP.ComService
                 txtAPI.Text = loginModel.Api;
                 chkAuto.Checked = loginModel.AutoLogin;
             }
+        }
+
+        private void chkAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            StaticFields.isAutorun = chkAuto.Checked;
         }
     }
 }

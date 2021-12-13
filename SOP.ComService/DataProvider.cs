@@ -23,20 +23,22 @@ namespace SOP.ComService
             _client = new HttpClient();
         }
 
-        public static async Task<MessageReport> CheckLogin(string id, string pw)
+        public static async Task<MessageReport> TestAuth()
         {
-            var report = new MessageReport() { Succeeded = false };
+            var report = new MessageReport();
 
             try
             {
-                var loginModel = new LoginModel() { Username = id, Password = pw };
+                var byteArray = Encoding.UTF8.GetBytes($"{StaticFields.Username}:{StaticFields.Password}");
 
                 var requestMsg = new HttpRequestMessage()
                 {
-                    Method = HttpMethod.Post,
-                    Content = new StringContent(JsonConvert.SerializeObject(loginModel)),
-                    RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/login")
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/testauth")
                 };
+
+                requestMsg.Headers.Authorization
+                     = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
 
                 var responseMsg = await _client.SendAsync(requestMsg);
 
@@ -53,7 +55,42 @@ namespace SOP.ComService
             return report;
         }
 
-        public static async Task<MessageReport> PushRating(object ratingType)
+        public static async Task<MessageReport> CheckLogin(string id, string pw)
+        {
+            var report = new MessageReport() { Succeeded = false };
+
+            try
+            {
+                var loginModel = new LoginModel() { Username = id, Password = pw };
+
+                var requestMsg = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Post,
+                    Content = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json"),
+                    RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/login")
+                };
+
+                var responseMsg = await _client.SendAsync(requestMsg);
+
+                if (responseMsg.IsSuccessStatusCode)
+                {
+                    report.Succeeded = true;
+
+                    var content = await responseMsg.Content.ReadAsStringAsync();
+
+                    int.TryParse(content, out StaticFields.UserId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
+                report.Exception = ex;
+            }
+
+            return report;
+        }
+
+        public static async Task<MessageReport> PushRating(RatingResult ratingModel)
         {
             var report = new MessageReport();
 
@@ -64,7 +101,7 @@ namespace SOP.ComService
                 var requestMsg = new HttpRequestMessage()
                 {
                     Method = HttpMethod.Post,
-                    Content = new StringContent(JsonConvert.SerializeObject(ratingType)),
+                    Content = new StringContent(JsonConvert.SerializeObject(ratingModel), Encoding.UTF8, "application/json"),
                     RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/rating")
                 };
 
@@ -81,6 +118,7 @@ namespace SOP.ComService
             catch (Exception ex)
             {
                 Log.Fatal(ex.Message);
+                report.Exception = ex;
             }
 
             return report;
