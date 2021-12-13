@@ -23,38 +23,6 @@ namespace SOP.ComService
             _client = new HttpClient();
         }
 
-        public static async Task<MessageReport> TestAuth()
-        {
-            var report = new MessageReport();
-
-            try
-            {
-                var byteArray = Encoding.UTF8.GetBytes($"{StaticFields.Username}:{StaticFields.Password}");
-
-                var requestMsg = new HttpRequestMessage()
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/testauth")
-                };
-
-                requestMsg.Headers.Authorization
-                     = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
-
-                var responseMsg = await _client.SendAsync(requestMsg);
-
-                if (responseMsg.IsSuccessStatusCode)
-                {
-                    report.Succeeded = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex.Message);
-            }
-
-            return report;
-        }
-
         public static async Task<MessageReport> CheckLogin(string id, string pw)
         {
             var report = new MessageReport() { Succeeded = false };
@@ -66,7 +34,7 @@ namespace SOP.ComService
                 var requestMsg = new HttpRequestMessage()
                 {
                     Method = HttpMethod.Post,
-                    Content = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json"),
+                    Content = new StringContent(JsonConvert.SerializeObject(loginModel)),
                     RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/login")
                 };
 
@@ -75,22 +43,17 @@ namespace SOP.ComService
                 if (responseMsg.IsSuccessStatusCode)
                 {
                     report.Succeeded = true;
-
-                    var content = await responseMsg.Content.ReadAsStringAsync();
-
-                    int.TryParse(content, out StaticFields.UserId);
                 }
             }
             catch (Exception ex)
             {
                 Log.Fatal(ex.Message);
-                report.Exception = ex;
             }
 
             return report;
         }
 
-        public static async Task<MessageReport> PushRating(RatingResult ratingModel)
+        public static async Task<MessageReport> PushRating(object ratingType)
         {
             var report = new MessageReport();
 
@@ -101,7 +64,7 @@ namespace SOP.ComService
                 var requestMsg = new HttpRequestMessage()
                 {
                     Method = HttpMethod.Post,
-                    Content = new StringContent(JsonConvert.SerializeObject(ratingModel), Encoding.UTF8, "application/json"),
+                    Content = new StringContent(JsonConvert.SerializeObject(ratingType)),
                     RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/rating")
                 };
 
@@ -118,7 +81,6 @@ namespace SOP.ComService
             catch (Exception ex)
             {
                 Log.Fatal(ex.Message);
-                report.Exception = ex;
             }
 
             return report;

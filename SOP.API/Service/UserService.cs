@@ -21,20 +21,6 @@ namespace SOP.API.Service
             return (obj);
         }
 
-        //public static object GetLstUser(int item)
-        //{
-        //    var sb = new StringBuilder();
-        //    sb.AppendLine("Select * from [User] ");
-        //    sb.AppendLine(string.Format("Where User_Id = '{0}'", item));
-        //}
-
-        public static DataTable GetDtUser()
-        {
-
-            var sb = new StringBuilder();
-            sb.AppendLine("Select * from [User] ");
-            DataTable dt = SqlHelper.GetTable(sb.ToString(), connStr, false);
-            return dt;
-        }
+       
     }
 }

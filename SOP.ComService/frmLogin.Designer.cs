@@ -32,7 +32,6 @@ namespace SOP.ComService
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLogin));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.chkAuto = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.txtAPI = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -43,6 +42,7 @@ namespace SOP.ComService
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.err = new System.Windows.Forms.ErrorProvider(this.components);
+            this.chkAuto = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.err)).BeginInit();
@@ -68,17 +68,6 @@ namespace SOP.ComService
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Thông tin đăng nhập";
-            // 
-            // chkAuto
-            // 
-            this.chkAuto.AutoSize = true;
-            this.chkAuto.Location = new System.Drawing.Point(301, 126);
-            this.chkAuto.Name = "chkAuto";
-            this.chkAuto.Size = new System.Drawing.Size(166, 24);
-            this.chkAuto.TabIndex = 3;
-            this.chkAuto.Text = "Tự động đăng nhập";
-            this.chkAuto.UseVisualStyleBackColor = true;
-            this.chkAuto.CheckedChanged += new System.EventHandler(this.chkAuto_CheckedChanged);
             // 
             // pictureBox1
             // 
@@ -166,6 +155,16 @@ namespace SOP.ComService
             // 
             this.err.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             this.err.ContainerControl = this;
+            // 
+            // chkAuto
+            // 
+            this.chkAuto.AutoSize = true;
+            this.chkAuto.Location = new System.Drawing.Point(301, 126);
+            this.chkAuto.Name = "chkAuto";
+            this.chkAuto.Size = new System.Drawing.Size(166, 24);
+            this.chkAuto.TabIndex = 3;
+            this.chkAuto.Text = "Tự động đăng nhập";
+            this.chkAuto.UseVisualStyleBackColor = true;
             // 
             // frmLogin
             // 

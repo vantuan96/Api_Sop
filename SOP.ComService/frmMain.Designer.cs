@@ -144,7 +144,6 @@ namespace SOP.ComService
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "ComService";
-            this.Load += new System.EventHandler(this.frmMain_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);

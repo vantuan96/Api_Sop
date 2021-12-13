@@ -20,7 +20,7 @@ namespace SOP.ComService
             Application.SetCompatibleTextRenderingDefault(false);
 
             Log.Logger = new LoggerConfiguration()
-                .WriteTo.Async(a => a.File("Logs\\log.txt", rollingInterval: RollingInterval.Day, shared:true))
+                .WriteTo.Async(a => a.File("log.txt", rollingInterval: RollingInterval.Day, shared:true))
                 .CreateLogger();
 
             Log.Information("Application Started");

@@ -6,7 +6,9 @@ using SOP.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+
 using System.Globalization;
+
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -14,27 +16,27 @@ using System.Web.Http;
 
 namespace SOP.API.Controllers
 {
+
     [BasicAuthentication]
     public class RateController : ApiController
     {
-        [Route("rating")]
+        
+       
+        [Route("Create")]
         [HttpPost]
-        public MessageReport Post(RatingResult model)
+        public MessageReport Post( RatingResult model)
         {
             var result = new MessageReport(false, "Có lỗi xảy ra");
-
-            try
+                    bool check = RateService.CreatObj(model);
+            if (check)
             {
-                model.RatingResult_CreatedOn = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-                bool check = RateService.CreatObj(model);
-                if (check)
-                {
-                    result = new MessageReport(check, "thêm thành công");
-                }
+                return result = new MessageReport(check, "thêm thành công");
             }
-            catch { }
-
-            return result;
+            //syyyy
+            else
+            {
+                return result = new MessageReport(false, "Lỗi");
+            }
         }
         [Route("listuser")]
         [HttpGet]
