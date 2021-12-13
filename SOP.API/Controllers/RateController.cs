@@ -5,11 +5,8 @@ using SOP.API.Service;
 using SOP.Shared.Models;
 using System;
 using System.Collections.Generic;
-<<<<<<< HEAD
 using System.Data;
-=======
 using System.Globalization;
->>>>>>> a85aa601b81d45303653188451021ea8ddd7613a
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -64,7 +61,7 @@ namespace SOP.API.Controllers
 
                 }
             }
-           
+           ///
             return lst;
         }
     }
