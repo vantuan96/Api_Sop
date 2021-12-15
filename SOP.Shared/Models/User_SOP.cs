@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SOP.API.Models
+namespace SOP.Shared.Models
 {
     public class User_SOP
     {
@@ -41,5 +42,15 @@ namespace SOP.API.Models
 
         public int User_CurrentDepartmentId { get; set; }
         public string User_UserName { get; set; }
+    }
+
+    public class User_SOP_RequestByUserNameModel
+    {
+        public string Username { get; set; }
+    }
+
+    public class User_SOP_RequestByListIdModel
+    {
+        public List<int> ListIds { get; set; }
     }
 }

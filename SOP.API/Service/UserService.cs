@@ -17,14 +17,13 @@ namespace SOP.API.Service
             var sb = new StringBuilder();
             sb.AppendLine("Select * from [User] ");
             sb.AppendLine(string.Format("Where User_UserName = '{0}'", username));
-            var obj = SqlHelper.GetTable( sb.ToString(), connStr ,false);
-            return (obj);
+            var obj = SqlHelper.GetTable(sb.ToString(), connStr, false);
+            return obj;
         }
 
 
         public static DataTable GetDtUser()
         {
-
             var sb = new StringBuilder();
             sb.AppendLine("Select * from [User] ");
             DataTable dt = SqlHelper.GetTable(sb.ToString(), connStr, false);

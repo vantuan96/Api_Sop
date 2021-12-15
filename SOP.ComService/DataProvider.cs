@@ -34,7 +34,7 @@ namespace SOP.ComService
                 var requestMsg = new HttpRequestMessage()
                 {
                     Method = HttpMethod.Post,
-                    Content = new StringContent(JsonConvert.SerializeObject(loginModel)),
+                    Content = new StringContent(JsonConvert.SerializeObject(loginModel), Encoding.UTF8, "application/json"),
                     RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/login")
                 };
 
@@ -53,7 +53,7 @@ namespace SOP.ComService
             return report;
         }
 
-        public static async Task<MessageReport> PushRating(object ratingType)
+        public static async Task<MessageReport> PushRating(RatingResult ratingModel)
         {
             var report = new MessageReport();
 
@@ -64,7 +64,7 @@ namespace SOP.ComService
                 var requestMsg = new HttpRequestMessage()
                 {
                     Method = HttpMethod.Post,
-                    Content = new StringContent(JsonConvert.SerializeObject(ratingType)),
+                    Content = new StringContent(JsonConvert.SerializeObject(ratingModel), Encoding.UTF8, "application/json"),
                     RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/rating")
                 };
 
@@ -84,6 +84,42 @@ namespace SOP.ComService
             }
 
             return report;
+        }
+
+        public static async Task<User_SOP> GetUserByUsername(string username)
+        {
+            var result = new User_SOP();
+
+            try
+            {
+                var byteArray = Encoding.UTF8.GetBytes($"{StaticFields.Username}:{StaticFields.Password}");
+
+                var requestModel = new User_SOP_RequestByUserNameModel() { Username = username };
+
+                var requestMsg = new HttpRequestMessage()
+                {
+                    Method = HttpMethod.Post,
+                    Content = new StringContent(JsonConvert.SerializeObject(requestModel), Encoding.UTF8, "application/json"),
+                    RequestUri = new Uri(StaticFields.APIURL.TrimEnd('/') + "/getuserbyname")
+                };
+
+                requestMsg.Headers.Authorization
+                     = new AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+
+                var responseMsg = await _client.SendAsync(requestMsg);
+
+                if (responseMsg.IsSuccessStatusCode)
+                {
+                    var responseContent = await responseMsg.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<User_SOP>(responseContent);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex.Message);
+            }
+
+            return result;
         }
 
         public static string Encrypt(this string text)

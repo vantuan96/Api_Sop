@@ -164,7 +164,6 @@
     </Compile>
     <Compile Include="LibaryHelper\FunctionHelper.cs" />
     <Compile Include="LibaryHelper\SqlHelper.cs" />
-    <Compile Include="Models\User_SOP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\RateService.cs" />
     <Compile Include="Service\UserService.cs" />
@@ -222,6 +221,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

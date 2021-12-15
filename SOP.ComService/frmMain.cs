@@ -58,7 +58,7 @@ namespace SOP.ComService
         private void PortModule_SerialDataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var _sender = sender as PortModule;
-            ProcessMessage(_sender.userId, e.ToString());
+            ProcessMessage(_sender.userId, e.ToString(), _sender);
         }
 
         private void AppendLog(string text)
@@ -78,7 +78,7 @@ namespace SOP.ComService
             this.Invoke(action);
         }
 
-        private async void ProcessMessage(int userId, string message)
+        private async void ProcessMessage(int userId, string message, PortModule box)
         {
             var ratingModel = new RatingResult()
             {
@@ -89,8 +89,9 @@ namespace SOP.ComService
 
             if (rating_id == 0)
             {
-                Log.Error($"Rating error : ({message})");
-                AppendLog($"Rating error : ({message})");
+                var msg = $"[{box.BoxName}]Lỗi tín hiệu: ({message})";
+                Log.Error(msg);
+                AppendLog(msg);
                 return;
             }
 
@@ -100,7 +101,7 @@ namespace SOP.ComService
 
             if (report.Succeeded)
             {
-                var msgRate = $"[{ratingModel.RatingResult_UserId}] received rate grade {GetRatingTextByRatingId(rating_id)}";
+                var msgRate = $"[{box.BoxName}]{ratingModel.RatingResult_UserId} nhận đánh giá [{GetRatingTextByRatingId(rating_id)}]";
                 Log.Information(msgRate);
                 AppendLog(msgRate);
             }
@@ -147,6 +148,16 @@ namespace SOP.ComService
                     });
                 });
             }
+        }
+
+        private void SaveFormData()
+        {
+
+        }
+
+        private void LoadFormData()
+        {
+
         }
     }
 }

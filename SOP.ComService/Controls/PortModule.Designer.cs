@@ -35,7 +35,7 @@
             this.btnTest = new System.Windows.Forms.Button();
             this.cbComPort = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.lbStatus = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
@@ -49,7 +49,7 @@
             this.groupBox1.Controls.Add(this.btnTest);
             this.groupBox1.Controls.Add(this.cbComPort);
             this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.lbStatus);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -116,16 +116,16 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Người dùng";
             // 
-            // label4
+            // lbStatus
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.ForeColor = System.Drawing.Color.Red;
-            this.label4.Location = new System.Drawing.Point(116, 32);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(45, 19);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Dừng";
+            this.lbStatus.AutoSize = true;
+            this.lbStatus.Font = new System.Drawing.Font("Consolas", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbStatus.ForeColor = System.Drawing.Color.Red;
+            this.lbStatus.Location = new System.Drawing.Point(116, 32);
+            this.lbStatus.Name = "lbStatus";
+            this.lbStatus.Size = new System.Drawing.Size(45, 19);
+            this.lbStatus.TabIndex = 0;
+            this.lbStatus.Text = "Dừng";
             // 
             // label2
             // 
@@ -168,7 +168,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox chkAuto;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label lbStatus;
         private System.Windows.Forms.Label label2;
     }
 }

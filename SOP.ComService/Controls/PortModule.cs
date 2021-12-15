@@ -29,6 +29,7 @@ namespace SOP.ComService.Controls
         private SerialPort serialPort;
 
         public int userId { get; set; }
+        public string userName { get; set; }
         public bool autoStart { get => chkAuto.Checked; }
 
         public PortModule()
@@ -45,29 +46,78 @@ namespace SOP.ComService.Controls
                 btnStart.PerformClick();
         }
 
+        private void ToggleControlState(bool isEnabled)
+        {
+            lbStatus.Text = isEnabled ? "Dừng" : "Hoạt động";
+            lbStatus.ForeColor = isEnabled ? Color.Red : Color.Green;
+            cbComPort.Enabled = isEnabled;
+            txtId.Enabled = isEnabled;
+            chkAuto.Enabled = isEnabled;
+            btnTest.Enabled = isEnabled;
+
+            btnStart.Text = isEnabled ? "Khởi động" : "Dừng";
+        }
+
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             SerialDataReceived?.Invoke(sender, e);
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
+        private async void btnTest_Click(object sender, EventArgs e)
+        {
+            if (await TryGetUser())
+                TestComPort();
+        }
+
+        private async void btnStart_Click(object sender, EventArgs e)
+        {
+            if (await TryGetUser())
+                StartComPort();
+        }
+
+
+        private async Task<bool> TryGetUser()
+        {
+            var result = new TextResultEventArg();
+
+            var user = await DataProvider.GetUserByUsername(txtId.Text.Trim());
+
+            if (user != null && user.User_Id != 0)
+            {
+                result.Message = $"[{groupBox1.Text}]Người dùng hợp lệ ({user.User_Id} - {user.User_UserName} - {user.User_FullName})";
+                result.Succeeded = true;
+                userId = user.User_Id;
+                userName = user.User_UserName;
+            }
+            else
+            {
+                result.Message = $"[{groupBox1.Text}]Người dùng không tồn tại";
+            }
+
+            TextReceived?.Invoke(this, result);
+
+            return result.Succeeded;
+        }
+
+        private void TestComPort()
         {
             var result = new TextResultEventArg();
 
             var port = cbComPort.SelectedText;
 
-            var testserialPort = new SerialPort(port, baudrate, parity, databit, stopbit);
+            SerialPort testserialPort = new SerialPort();
 
             try
             {
+                testserialPort = new SerialPort(port, baudrate, parity, databit, stopbit);
                 testserialPort.Open();
-                string message = $"[{port}][{baudrate}] Port test OK";
+                string message = $"[{groupBox1.Text}]Kiểm tra kết nối thành công ({port})";
                 result.Message = message;
                 result.Succeeded = true;
             }
             catch (Exception)
             {
-                string message = $"[{port}][{baudrate}] Port test failed";
+                string message = $"[{groupBox1.Text}]Kiểm tra kết nối thất bại ({port}) ";
                 result.Message = message;
             }
             finally
@@ -81,7 +131,7 @@ namespace SOP.ComService.Controls
             TextReceived?.Invoke(this, result);
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
+        private void StartComPort()
         {
             var result = new TextResultEventArg();
 
@@ -91,22 +141,25 @@ namespace SOP.ComService.Controls
                 serialPort.DataReceived -= SerialPort_DataReceived;
                 serialPort.Dispose();
 
-                result.Message = "Port Closed";
+                result.Message = $"[{groupBox1.Text}]Ngắt kết nối";
                 result.Succeeded = true;
+                ToggleControlState(true);
             }
             else
             {
                 var port = cbComPort.SelectedText;
 
-                serialPort = new SerialPort(port, baudrate, parity, databit, stopbit);
+                serialPort = new SerialPort();
 
                 try
                 {
+                    serialPort = new SerialPort(port, baudrate, parity, databit, stopbit);
                     serialPort.DataReceived += SerialPort_DataReceived;
                     serialPort.Open();
 
-                    result.Message = "Port Opened Successfully";
+                    result.Message = $"[{groupBox1.Text}]Kết nối port thành công";
                     result.Succeeded = true;
+                    ToggleControlState(false);
                 }
                 catch (Exception ex)
                 {
@@ -114,18 +167,20 @@ namespace SOP.ComService.Controls
                 }
                 finally
                 {
-                    if (serialPort.IsOpen)
-                        serialPort.Close();
-                    serialPort.DataReceived -= SerialPort_DataReceived;
-                    serialPort.Dispose();
+                    if (!serialPort.IsOpen)
+                    {
+                        serialPort.DataReceived -= SerialPort_DataReceived;
+                        serialPort.Dispose();
+                        ToggleControlState(true);
+                    }
                 }
             }
 
             TextReceived?.Invoke(this, result);
         }
-
-        public delegate void TextDataReceived(object sender, TextResultEventArg result);
     }
+
+    public delegate void TextDataReceived(object sender, TextResultEventArg result);
 
     public class TextResultEventArg : EventArgs
     {

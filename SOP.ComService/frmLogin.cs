@@ -74,6 +74,8 @@ namespace SOP.ComService
 
         private async void btnOK_Click(object sender, EventArgs e)
         {
+            autoLoginTimer.Elapsed -= AutoLoginTimer_Elapsed;
+
             if (ValidateInfo())
             {
                 StaticFields.APIURL = txtAPI.Text;
@@ -160,6 +162,15 @@ namespace SOP.ComService
                 txtPassword.Text = loginModel.Password;
                 txtAPI.Text = loginModel.Api;
                 chkAuto.Checked = loginModel.AutoLogin;
+            }
+        }
+
+        private void chkAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            if(!chkAuto.Checked)
+            {
+                autoLoginTimer.Elapsed -= AutoLoginTimer_Elapsed;
+                chkAuto.Text = "Tự động đăng nhập";
             }
         }
     }
