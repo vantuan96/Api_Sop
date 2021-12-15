@@ -36,18 +36,18 @@ namespace SOP.API.Controllers
         [HttpPost]
         public IHttpActionResult Login(LoginModel loginModel)
         {
-
-            var result = new MessageReport(false, "Có lỗi xảy ra");
-
             ////Kiểm tra tks
             var dt = UserService.GetByUsername(loginModel.Username);
 
-            var pass = FunctionHelper.Encrypt(loginModel.Password);         
+            if(dt != null && dt.Rows.Count > 0)
+            {
+                var pass = FunctionHelper.Encrypt(loginModel.Password);
 
-            var usre_pass = dt.Rows[0]["User_PassWord"].ToString();
+                var usre_pass = dt.Rows[0]["User_PassWord"].ToString();
 
-            if (usre_pass == pass)
-                return Ok();
+                if (usre_pass == pass)
+                    return Ok();
+            }
 
             return Unauthorized();
         }

@@ -23,7 +23,7 @@ namespace SOP.ComService.Controls
 
         public int baudrate { get; set; } = 9600;
 
-        public event SerialDataReceivedEventHandler SerialDataReceived;
+        public event SerialDataReceived SerialDataReceived;
         public event TextDataReceived TextReceived;
 
         private SerialPort serialPort;
@@ -35,7 +35,11 @@ namespace SOP.ComService.Controls
         public PortModule()
         {
             InitializeComponent();
+            RefreshPortList();
+        }
 
+        public void RefreshPortList()
+        {
             var listComPort = SerialPort.GetPortNames();
             cbComPort.DataSource = listComPort;
         }
@@ -60,7 +64,8 @@ namespace SOP.ComService.Controls
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            SerialDataReceived?.Invoke(sender, e);
+            var msg = serialPort.ReadExisting();
+            SerialDataReceived?.Invoke(this, new TextResultEventArg() { Message = msg });
         }
 
         private async void btnTest_Click(object sender, EventArgs e)
@@ -103,7 +108,7 @@ namespace SOP.ComService.Controls
         {
             var result = new TextResultEventArg();
 
-            var port = cbComPort.SelectedText;
+            var port = cbComPort.SelectedItem.ToString();
 
             SerialPort testserialPort = new SerialPort();
 
@@ -147,7 +152,7 @@ namespace SOP.ComService.Controls
             }
             else
             {
-                var port = cbComPort.SelectedText;
+                var port = cbComPort.SelectedItem.ToString();
 
                 serialPort = new SerialPort();
 
@@ -180,7 +185,9 @@ namespace SOP.ComService.Controls
         }
     }
 
-    public delegate void TextDataReceived(object sender, TextResultEventArg result);
+    public delegate void TextDataReceived(object sender, TextResultEventArg e);
+
+    public delegate void SerialDataReceived(object sender, TextResultEventArg e);
 
     public class TextResultEventArg : EventArgs
     {

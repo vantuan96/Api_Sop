@@ -42,7 +42,7 @@ namespace SOP.ComService
             portModule6.TextReceived += PortModule_TextReceived;
         }
 
-        private void PortModule_TextReceived(object sender, Controls.TextResultEventArg result)
+        private void PortModule_TextReceived(object sender, TextResultEventArg result)
         {
             AppendLog(result.Message);
             if(result.Succeeded)
@@ -55,10 +55,10 @@ namespace SOP.ComService
             }
         }
 
-        private void PortModule_SerialDataReceived(object sender, SerialDataReceivedEventArgs e)
+        private void PortModule_SerialDataReceived(object sender, TextResultEventArg e)
         {
             var _sender = sender as PortModule;
-            ProcessMessage(_sender.userId, e.ToString(), _sender);
+            ProcessMessage(_sender, e.Message);
         }
 
         private void AppendLog(string text)
@@ -78,11 +78,11 @@ namespace SOP.ComService
             this.Invoke(action);
         }
 
-        private async void ProcessMessage(int userId, string message, PortModule box)
+        private async void ProcessMessage(PortModule box, string message)
         {
             var ratingModel = new RatingResult()
             {
-                RatingResult_UserId = userId,
+                RatingResult_UserId = box.userId,
             };
 
             StaticFields.RatingValue.TryGetValue(message, out int rating_id);
@@ -101,7 +101,7 @@ namespace SOP.ComService
 
             if (report.Succeeded)
             {
-                var msgRate = $"[{box.BoxName}]{ratingModel.RatingResult_UserId} nhận đánh giá [{GetRatingTextByRatingId(rating_id)}]";
+                var msgRate = $"[{box.BoxName}]{box.userName} nhận đánh giá [{GetRatingTextByRatingId(rating_id)}]";
                 Log.Information(msgRate);
                 AppendLog(msgRate);
             }
