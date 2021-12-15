@@ -1,4 +1,6 @@
 ﻿using Serilog;
+using SOP.ComService.Controls;
+using SOP.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +10,7 @@ using System.Globalization;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,11 +18,6 @@ namespace SOP.ComService
 {
     public partial class frmMain : Form
     {
-        private Parity parity = Parity.None;
-        private int databit = 8;
-        private StopBits stopbit = StopBits.One;
-        private SerialPort serialPort;
-
         public frmMain()
         {
             InitializeComponent();
@@ -29,31 +27,47 @@ namespace SOP.ComService
 
         private void Init()
         {
-            //List Com port
-            var listComPort = SerialPort.GetPortNames();
-            cbComPort.DataSource = listComPort;
+            portModule1.SerialDataReceived += PortModule_SerialDataReceived;
+            portModule2.SerialDataReceived += PortModule_SerialDataReceived;
+            portModule3.SerialDataReceived += PortModule_SerialDataReceived;
+            portModule4.SerialDataReceived += PortModule_SerialDataReceived;
+            portModule5.SerialDataReceived += PortModule_SerialDataReceived;
+            portModule6.SerialDataReceived += PortModule_SerialDataReceived;
 
-            //List Baudate
-            var listBaudrate = new List<int>()
+            portModule1.TextReceived += PortModule_TextReceived;
+            portModule2.TextReceived += PortModule_TextReceived;
+            portModule3.TextReceived += PortModule_TextReceived;
+            portModule4.TextReceived += PortModule_TextReceived;
+            portModule5.TextReceived += PortModule_TextReceived;
+            portModule6.TextReceived += PortModule_TextReceived;
+        }
+
+        private void PortModule_TextReceived(object sender, Controls.TextResultEventArg result)
+        {
+            AppendLog(result.Message);
+            if(result.Succeeded)
             {
-                1200,
-                2400,
-                4800,
-                9600,
-                19200,
-                38400,
-                57600,
-                115200,
-            };
+                Log.Information(result.Message);
+            }
+            else
+            {
+                Log.Error(result.Message);
+            }
+        }
 
-            cbBaudrate.DataSource = listBaudrate;
-            cbBaudrate.SelectedIndex = 3;
+        private void PortModule_SerialDataReceived(object sender, SerialDataReceivedEventArgs e)
+        {
+            var _sender = sender as PortModule;
+            ProcessMessage(_sender.userId, e.ToString());
         }
 
         private void AppendLog(string text)
         {
             InvokeMethod(() =>
             {
+                if (textBox1.Lines.Count() > 200)
+                    textBox1.Clear();
+
                 textBox1.AppendText($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)} : {text}");
                 textBox1.AppendText("\r\n");
             });
@@ -64,131 +78,74 @@ namespace SOP.ComService
             this.Invoke(action);
         }
 
-        private void btnTest_Click(object sender, EventArgs e)
+        private async void ProcessMessage(int userId, string message)
         {
-            var port = cbComPort.SelectedValue.ToString();
-            var baud = int.Parse(cbBaudrate.SelectedValue.ToString());
+            var ratingModel = new RatingResult()
+            {
+                RatingResult_UserId = userId,
+            };
 
-            var testserialPort = new SerialPort(port, baud, parity, databit, stopbit);
-            try
-            {
-                testserialPort.Open();
-                string message = $"[{port}][{baud}] Port test OK";
-                AppendLog(message);
-                Log.Information(message);
-            }
-            catch (Exception)
-            {
-                string message = $"[{port}][{baud}] Port test failed";
-                AppendLog(message);
-                Log.Error(message);
-            }
-            finally
-            {
-                if (testserialPort.IsOpen)
-                    testserialPort.Close();
+            StaticFields.RatingValue.TryGetValue(message, out int rating_id);
 
-                testserialPort.Dispose();
+            if (rating_id == 0)
+            {
+                Log.Error($"Rating error : ({message})");
+                AppendLog($"Rating error : ({message})");
+                return;
+            }
+
+            ratingModel.RatingResult_RatingId = rating_id;
+
+            var report = await DataProvider.PushRating(ratingModel);
+
+            if (report.Succeeded)
+            {
+                var msgRate = $"[{ratingModel.RatingResult_UserId}] received rate grade {GetRatingTextByRatingId(rating_id)}";
+                Log.Information(msgRate);
+                AppendLog(msgRate);
             }
         }
 
-        private void btnStart_Click(object sender, EventArgs e)
+        private string GetRatingTextByRatingId(int id)
         {
-            //Stop
-            if (serialPort != null && serialPort.IsOpen)
+            switch (id)
             {
-                serialPort.Close();
-                serialPort.DataReceived -= SerialPort_DataReceived;
-                serialPort.Dispose();
-                btnStart.Text = "Start";
-                groupBox1.Enabled = true;
-                btnTest.Enabled = true;
-                AppendLog("Service Stopped");
-                Log.Information("Service Stopped");
-            }
-            //Start
-            else
-            {
-                var port = cbComPort.SelectedValue.ToString();
-                var baud = int.Parse(cbBaudrate.SelectedValue.ToString());
-                serialPort = new SerialPort(port, baud, parity, databit, stopbit);
+                case 5:
+                    return "Rất hài lòng";
 
-                try
-                {
-                    serialPort.DataReceived += SerialPort_DataReceived;
-                    serialPort.Open();
+                case 4:
+                    return "Hài lòng";
 
-                    btnStart.Text = "Stop";
-                    groupBox1.Enabled = false;
-                    btnTest.Enabled = false;
-                    AppendLog("Service Started Successfully");
-                    Log.Information("Service Started Successfully");
-                }
-                catch (Exception)
-                {
-                    AppendLog("Service Failed To Start");
-                    Log.Error("Service Failed To Start");
-                }
-                finally
-                {
-                    if (!serialPort.IsOpen)
-                    {
-                        serialPort.DataReceived -= SerialPort_DataReceived;
-                        serialPort.Dispose();
-                    }
-                }
-            }
+                case 3:
+                    return "Chờ lâu";
 
-        }
+                case 2:
+                    return "Nghiệp vụ kém";
 
-        private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
-        {
-            var dataReceived = serialPort?.ReadExisting();
-
-            ProcessMessage(dataReceived);
-        }
-
-        private void ProcessMessage(string message)
-        {
-            switch (message)
-            {
-                //Rất Hài Lòng
-                case ("a5b"):
-                    {
-                        Log.Information($"Rated 5");
-                        break;
-                    };
-
-                //Hài Lòng
-                case ("c4d"):
-                    {
-                        Log.Information($"Rated 4");
-                        break;
-                    };
-
-                //Chờ Lâu
-                case ("e3f"):
-                    {
-                        Log.Information($"Rated 3");
-                        break;
-                    };
-
-                //Nghiệp vụ kém
-                case ("g2h"):
-                    {
-                        Log.Information($"Rated 2");
-                        break;
-                    };
-
-                //Thái độ lồi lõm
-                case ("i1k"):
-                    {
-                        Log.Information($"Rated 1");
-                        break;
-                    };
+                case 1:
+                    return "Thái độ kém";
 
                 default:
-                    break;
+                    return "";
+            }
+        }
+
+        private void frmMain_Load(object sender, EventArgs e)
+        {
+            if (StaticFields.isAutorun)
+            {
+                Task.Run(() =>
+                {
+                    InvokeMethod(() =>
+                    {
+                        portModule1.DoAutoStart();
+                        portModule2.DoAutoStart();
+                        portModule3.DoAutoStart();
+                        portModule4.DoAutoStart();
+                        portModule5.DoAutoStart();
+                        portModule6.DoAutoStart();
+                    });
+                });
             }
         }
     }

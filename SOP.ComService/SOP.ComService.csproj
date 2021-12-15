@@ -62,6 +62,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\PortModule.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PortModule.Designer.cs">
+      <DependentUpon>PortModule.cs</DependentUpon>
+    </Compile>
     <Compile Include="CredentialModel.cs" />
     <Compile Include="DataProvider.cs" />
     <Compile Include="frmMain.cs">
@@ -79,6 +85,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StaticFields.cs" />
+    <EmbeddedResource Include="Controls\PortModule.resx">
+      <DependentUpon>PortModule.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
     </EmbeddedResource>
