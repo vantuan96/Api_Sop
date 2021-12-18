@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.chkAuto = new System.Windows.Forms.CheckBox();
-            this.txtId = new System.Windows.Forms.TextBox();
+            this.txtUsername = new System.Windows.Forms.TextBox();
             this.btnStart = new System.Windows.Forms.Button();
             this.btnTest = new System.Windows.Forms.Button();
             this.cbComPort = new System.Windows.Forms.ComboBox();
@@ -38,13 +39,15 @@
             this.lbStatus = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.bsPortList = new System.Windows.Forms.BindingSource(this.components);
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPortList)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.chkAuto);
-            this.groupBox1.Controls.Add(this.txtId);
+            this.groupBox1.Controls.Add(this.txtUsername);
             this.groupBox1.Controls.Add(this.btnStart);
             this.groupBox1.Controls.Add(this.btnTest);
             this.groupBox1.Controls.Add(this.cbComPort);
@@ -71,12 +74,12 @@
             this.chkAuto.Text = "Tự khởi động";
             this.chkAuto.UseVisualStyleBackColor = true;
             // 
-            // txtId
+            // txtUsername
             // 
-            this.txtId.Location = new System.Drawing.Point(116, 95);
-            this.txtId.Name = "txtId";
-            this.txtId.Size = new System.Drawing.Size(151, 26);
-            this.txtId.TabIndex = 2;
+            this.txtUsername.Location = new System.Drawing.Point(116, 95);
+            this.txtUsername.Name = "txtUsername";
+            this.txtUsername.Size = new System.Drawing.Size(151, 26);
+            this.txtUsername.TabIndex = 2;
             // 
             // btnStart
             // 
@@ -154,6 +157,7 @@
             this.Size = new System.Drawing.Size(273, 199);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bsPortList)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -161,7 +165,7 @@
         #endregion
 
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.TextBox txtId;
+        private System.Windows.Forms.TextBox txtUsername;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Button btnTest;
         private System.Windows.Forms.ComboBox cbComPort;
@@ -170,5 +174,6 @@
         private System.Windows.Forms.CheckBox chkAuto;
         private System.Windows.Forms.Label lbStatus;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.BindingSource bsPortList;
     }
 }

@@ -27,21 +27,69 @@ namespace SOP.ComService.Controls
         public event TextDataReceived TextReceived;
 
         private SerialPort serialPort;
+        private BindingList<string> listPort = new BindingList<string>();
 
         public int userId { get; set; }
-        public string userName { get; set; }
-        public bool autoStart { get => chkAuto.Checked; }
+        public string userName { get => txtUsername.Text; set => txtUsername.Text = value; }
+        public bool autoStart { get => chkAuto.Checked; set => chkAuto.Checked = value; }
+
+        public string comPort
+        {
+            get
+            {
+                var selectedItem = cbComPort.SelectedItem;
+                return selectedItem != null ? selectedItem.ToString() : "";
+            }
+
+            set
+            {
+                var selectedItem = listPort.FirstOrDefault(p => p == value);
+                if (selectedItem != null)
+                    cbComPort.SelectedItem = selectedItem;
+            }
+        }
 
         public PortModule()
         {
             InitializeComponent();
-            RefreshPortList();
+            bsPortList.DataSource = listPort;
+            cbComPort.DataSource = bsPortList;
+            foreach (var item in SerialPortService.GetAvailableSerialPorts().ToList())
+            {
+                listPort.Add(item);
+            }
+            SerialPortService.PortsChanged += SerialPortService_PortsChanged;
         }
 
-        public void RefreshPortList()
+        private void SerialPortService_PortsChanged(object sender, PortsChangedArgs e)
         {
-            var listComPort = SerialPort.GetPortNames();
-            cbComPort.DataSource = listComPort;
+            if (e.EventType == EventType.Insertion)
+            {
+                foreach (var port in e.SerialPorts)
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        listPort.Add(port);
+                    }));
+                }
+            }
+            else
+            {
+                foreach (var port in e.SerialPorts)
+                {
+                    this.Invoke(new Action(() =>
+                    {
+                        var _portToRemove = listPort.FirstOrDefault(p => p == port);
+                        if (_portToRemove != null)
+                            listPort.Remove(_portToRemove);
+                    }));
+                }
+            }
+
+            this.Invoke(new Action(() =>
+            {
+                bsPortList.DataSource = listPort;
+            }));
         }
 
         public void DoAutoStart()
@@ -50,12 +98,20 @@ namespace SOP.ComService.Controls
                 btnStart.PerformClick();
         }
 
+        public void LoadModuleInfo(PortInfoModel portInfo)
+        {
+            this.userId = portInfo.UserId;
+            this.userName = portInfo.UserName;
+            this.autoStart = portInfo.AutoStart;
+            this.cbComPort.SelectedItem = portInfo.ComPort;
+        }
+
         private void ToggleControlState(bool isEnabled)
         {
             lbStatus.Text = isEnabled ? "Dừng" : "Hoạt động";
             lbStatus.ForeColor = isEnabled ? Color.Red : Color.Green;
             cbComPort.Enabled = isEnabled;
-            txtId.Enabled = isEnabled;
+            txtUsername.Enabled = isEnabled;
             chkAuto.Enabled = isEnabled;
             btnTest.Enabled = isEnabled;
 
@@ -85,14 +141,13 @@ namespace SOP.ComService.Controls
         {
             var result = new TextResultEventArg();
 
-            var user = await DataProvider.GetUserByUsername(txtId.Text.Trim());
+            var user = await DataProvider.GetUserByUsername(userName.Trim());
 
             if (user != null && user.User_Id != 0)
             {
                 result.Message = $"[{groupBox1.Text}]Người dùng hợp lệ ({user.User_Id} - {user.User_UserName} - {user.User_FullName})";
                 result.Succeeded = true;
                 userId = user.User_Id;
-                userName = user.User_UserName;
             }
             else
             {

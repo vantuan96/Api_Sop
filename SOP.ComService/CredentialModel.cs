@@ -1,6 +1,8 @@
-﻿namespace SOP.ComService
+﻿using System.Collections.Generic;
+
+namespace SOP.ComService
 {
-    internal class CredentialModel
+    public class CredentialModel
     {
         public string Id { get; set; }
         public string Password { get; set; }

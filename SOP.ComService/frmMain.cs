@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Newtonsoft.Json;
+using Serilog;
 using SOP.ComService.Controls;
 using SOP.Shared.Models;
 using System;
@@ -7,6 +8,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Globalization;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -40,12 +42,42 @@ namespace SOP.ComService
             portModule4.TextReceived += PortModule_TextReceived;
             portModule5.TextReceived += PortModule_TextReceived;
             portModule6.TextReceived += PortModule_TextReceived;
+
+            SerialPortService.PortsChanged += SerialPortService_PortsChanged;
+        }
+
+        private void SerialPortService_PortsChanged(object sender, PortsChangedArgs e)
+        {
+            if (e.EventType == EventType.Insertion)
+            {
+                InvokeMethod(() =>
+                {
+                    foreach (var port in e.SerialPorts)
+                    {
+                        var msg = $"Phát hiện cổng [{port}] đc thêm vào hệ thống";
+                        AppendLog(msg);
+                        Log.Information(msg);
+                    }
+                });
+            }
+            else
+            {
+                InvokeMethod(() =>
+                {
+                    foreach (var port in e.SerialPorts)
+                    {
+                        var msg = $"Phát hiện cổng [{port}] gỡ khỏi hệ thống";
+                        AppendLog(msg);
+                        Log.Information(msg);
+                    }
+                });
+            }
         }
 
         private void PortModule_TextReceived(object sender, TextResultEventArg result)
         {
             AppendLog(result.Message);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 Log.Information(result.Message);
             }
@@ -133,6 +165,8 @@ namespace SOP.ComService
 
         private void frmMain_Load(object sender, EventArgs e)
         {
+            LoadFormData(AppDomain.CurrentDomain.BaseDirectory + "maindata.dat");
+
             if (StaticFields.isAutorun)
             {
                 Task.Run(() =>
@@ -150,14 +184,105 @@ namespace SOP.ComService
             }
         }
 
-        private void SaveFormData()
+        private void SaveFormData(string filepath)
         {
+            var listInfo = new List<PortInfoModel>()
+            {
+                new PortInfoModel() { Index = 1, AutoStart = portModule1.autoStart, ComPort = portModule1.comPort, UserId = portModule1.userId, UserName = portModule1.userName },
+                new PortInfoModel() { Index = 2, AutoStart = portModule2.autoStart, ComPort = portModule2.comPort, UserId = portModule2.userId, UserName = portModule2.userName },
+                new PortInfoModel() { Index = 3, AutoStart = portModule3.autoStart, ComPort = portModule3.comPort, UserId = portModule3.userId, UserName = portModule3.userName },
+                new PortInfoModel() { Index = 4, AutoStart = portModule4.autoStart, ComPort = portModule4.comPort, UserId = portModule4.userId, UserName = portModule4.userName },
+                new PortInfoModel() { Index = 5, AutoStart = portModule5.autoStart, ComPort = portModule5.comPort, UserId = portModule5.userId, UserName = portModule5.userName },
+                new PortInfoModel() { Index = 6, AutoStart = portModule6.autoStart, ComPort = portModule6.comPort, UserId = portModule6.userId, UserName = portModule6.userName }
+            };
 
+
+            var data = JsonConvert.SerializeObject(listInfo);
+            var encryptedData = DataProvider.Encrypt(data);
+
+            var bytedata = Encoding.UTF8.GetBytes(encryptedData);
+            File.WriteAllBytes(filepath, bytedata);
         }
 
-        private void LoadFormData()
+        private void LoadFormData(string filepath)
         {
+            try
+            {
+                var bytedata = File.ReadAllBytes(filepath);
+                var encryptedData = Encoding.UTF8.GetString(bytedata);
+                var data = DataProvider.Decrypt(encryptedData);
 
+                var listInfo = JsonConvert.DeserializeObject<List<PortInfoModel>>(data);
+
+                if (listInfo != null)
+                {
+                    //Module1
+                    var info1 = listInfo.FirstOrDefault(p => p.Index == 1);
+                    if (info1 != null)
+                    {
+                        portModule1.autoStart = info1.AutoStart;
+                        portModule1.comPort = info1.ComPort;
+                        portModule1.userId = info1.UserId;
+                        portModule1.userName = info1.UserName;
+                    }
+
+                    //Module2
+                    var info2 = listInfo.FirstOrDefault(p => p.Index == 2);
+                    if (info2 != null)
+                    {
+                        portModule2.autoStart = info2.AutoStart;
+                        portModule2.comPort = info2.ComPort;
+                        portModule2.userId = info2.UserId;
+                        portModule2.userName = info2.UserName;
+                    }
+
+                    //Module3
+                    var info3 = listInfo.FirstOrDefault(p => p.Index == 3);
+                    if (info3 != null)
+                    {
+                        portModule3.autoStart = info3.AutoStart;
+                        portModule3.comPort = info3.ComPort;
+                        portModule3.userId = info3.UserId;
+                        portModule3.userName = info3.UserName;
+                    }
+
+                    //Module4
+                    var info4 = listInfo.FirstOrDefault(p => p.Index == 4);
+                    if (info4 != null)
+                    {
+                        portModule4.autoStart = info4.AutoStart;
+                        portModule4.comPort = info4.ComPort;
+                        portModule4.userId = info4.UserId;
+                        portModule4.userName = info4.UserName;
+                    }
+
+                    //Module5
+                    var info5 = listInfo.FirstOrDefault(p => p.Index == 5);
+                    if (info5 != null)
+                    {
+                        portModule5.autoStart = info5.AutoStart;
+                        portModule5.comPort = info5.ComPort;
+                        portModule5.userId = info5.UserId;
+                        portModule5.userName = info5.UserName;
+                    }
+
+                    //Module6
+                    var info6 = listInfo.FirstOrDefault(p => p.Index == 6);
+                    if (info6 != null)
+                    {
+                        portModule6.autoStart = info6.AutoStart;
+                        portModule6.comPort = info6.ComPort;
+                        portModule6.userId = info6.UserId;
+                        portModule6.userName = info6.UserName;
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveFormData(AppDomain.CurrentDomain.BaseDirectory + "maindata.dat");
         }
     }
 }

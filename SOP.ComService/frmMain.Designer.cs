@@ -51,51 +51,93 @@ namespace SOP.ComService
             // 
             // portModule1
             // 
+            this.portModule1.autoStart = false;
+            this.portModule1.baudrate = 9600;
             this.portModule1.BoxName = "Kênh 1";
+            this.portModule1.databit = 8;
             this.portModule1.Location = new System.Drawing.Point(12, 12);
             this.portModule1.Name = "portModule1";
+            this.portModule1.parity = System.IO.Ports.Parity.None;
             this.portModule1.Size = new System.Drawing.Size(273, 199);
+            this.portModule1.stopbit = System.IO.Ports.StopBits.One;
             this.portModule1.TabIndex = 1;
+            this.portModule1.userId = 0;
+            this.portModule1.userName = null;
             // 
             // portModule2
             // 
+            this.portModule2.autoStart = false;
+            this.portModule2.baudrate = 9600;
             this.portModule2.BoxName = "Kênh 2";
+            this.portModule2.databit = 8;
             this.portModule2.Location = new System.Drawing.Point(291, 12);
             this.portModule2.Name = "portModule2";
+            this.portModule2.parity = System.IO.Ports.Parity.None;
             this.portModule2.Size = new System.Drawing.Size(273, 199);
+            this.portModule2.stopbit = System.IO.Ports.StopBits.One;
             this.portModule2.TabIndex = 1;
+            this.portModule2.userId = 0;
+            this.portModule2.userName = null;
             // 
             // portModule3
             // 
+            this.portModule3.autoStart = false;
+            this.portModule3.baudrate = 9600;
             this.portModule3.BoxName = "Kênh 3";
+            this.portModule3.databit = 8;
             this.portModule3.Location = new System.Drawing.Point(570, 12);
             this.portModule3.Name = "portModule3";
+            this.portModule3.parity = System.IO.Ports.Parity.None;
             this.portModule3.Size = new System.Drawing.Size(273, 199);
+            this.portModule3.stopbit = System.IO.Ports.StopBits.One;
             this.portModule3.TabIndex = 1;
+            this.portModule3.userId = 0;
+            this.portModule3.userName = null;
             // 
             // portModule4
             // 
+            this.portModule4.autoStart = false;
+            this.portModule4.baudrate = 9600;
             this.portModule4.BoxName = "Kênh 4";
+            this.portModule4.databit = 8;
             this.portModule4.Location = new System.Drawing.Point(12, 217);
             this.portModule4.Name = "portModule4";
+            this.portModule4.parity = System.IO.Ports.Parity.None;
             this.portModule4.Size = new System.Drawing.Size(273, 199);
+            this.portModule4.stopbit = System.IO.Ports.StopBits.One;
             this.portModule4.TabIndex = 1;
+            this.portModule4.userId = 0;
+            this.portModule4.userName = null;
             // 
             // portModule5
             // 
+            this.portModule5.autoStart = false;
+            this.portModule5.baudrate = 9600;
             this.portModule5.BoxName = "Kênh 5";
+            this.portModule5.databit = 8;
             this.portModule5.Location = new System.Drawing.Point(291, 217);
             this.portModule5.Name = "portModule5";
+            this.portModule5.parity = System.IO.Ports.Parity.None;
             this.portModule5.Size = new System.Drawing.Size(273, 199);
+            this.portModule5.stopbit = System.IO.Ports.StopBits.One;
             this.portModule5.TabIndex = 1;
+            this.portModule5.userId = 0;
+            this.portModule5.userName = null;
             // 
             // portModule6
             // 
+            this.portModule6.autoStart = false;
+            this.portModule6.baudrate = 9600;
             this.portModule6.BoxName = "Kênh 6";
+            this.portModule6.databit = 8;
             this.portModule6.Location = new System.Drawing.Point(570, 217);
             this.portModule6.Name = "portModule6";
+            this.portModule6.parity = System.IO.Ports.Parity.None;
             this.portModule6.Size = new System.Drawing.Size(273, 199);
+            this.portModule6.stopbit = System.IO.Ports.StopBits.One;
             this.portModule6.TabIndex = 1;
+            this.portModule6.userId = 0;
+            this.portModule6.userName = null;
             // 
             // label1
             // 
@@ -125,6 +167,7 @@ namespace SOP.ComService
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.Text = "ComService";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
