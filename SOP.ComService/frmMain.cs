@@ -24,6 +24,7 @@ namespace SOP.ComService
         {
             InitializeComponent();
             this.Icon = Properties.Resources._6074_brainstorm_bulb_idea_jabber_light_icon;
+            this.trayIcon.Icon = Properties.Resources._6074_brainstorm_bulb_idea_jabber_light_icon;
             Init();
         }
 
@@ -282,7 +283,35 @@ namespace SOP.ComService
 
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                this.Hide();
+                e.Cancel = true;
+            }
+        }
+
+        private void frmMain_FormClosed(object sender, FormClosedEventArgs e)
+        {
             SaveFormData(AppDomain.CurrentDomain.BaseDirectory + "maindata.dat");
+        }
+
+        private void trayIcon_DoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void btnShow_Click(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void btnExit_Click(object sender, EventArgs e)
+        {
+            if(MessageBox.Show("Thoát chương trình ?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                trayIcon.Dispose();
+                Application.Exit();
+            }
         }
     }
 }

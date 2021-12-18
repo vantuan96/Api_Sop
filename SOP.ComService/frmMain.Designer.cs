@@ -29,6 +29,7 @@ namespace SOP.ComService
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.portModule1 = new SOP.ComService.Controls.PortModule();
             this.portModule2 = new SOP.ComService.Controls.PortModule();
@@ -37,6 +38,11 @@ namespace SOP.ComService
             this.portModule5 = new SOP.ComService.Controls.PortModule();
             this.portModule6 = new SOP.ComService.Controls.PortModule();
             this.label1 = new System.Windows.Forms.Label();
+            this.trayIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.btnShow = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBox1
@@ -54,6 +60,7 @@ namespace SOP.ComService
             this.portModule1.autoStart = false;
             this.portModule1.baudrate = 9600;
             this.portModule1.BoxName = "Kênh 1";
+            this.portModule1.comPort = "";
             this.portModule1.databit = 8;
             this.portModule1.Location = new System.Drawing.Point(12, 12);
             this.portModule1.Name = "portModule1";
@@ -62,13 +69,14 @@ namespace SOP.ComService
             this.portModule1.stopbit = System.IO.Ports.StopBits.One;
             this.portModule1.TabIndex = 1;
             this.portModule1.userId = 0;
-            this.portModule1.userName = null;
+            this.portModule1.userName = "";
             // 
             // portModule2
             // 
             this.portModule2.autoStart = false;
             this.portModule2.baudrate = 9600;
             this.portModule2.BoxName = "Kênh 2";
+            this.portModule2.comPort = "";
             this.portModule2.databit = 8;
             this.portModule2.Location = new System.Drawing.Point(291, 12);
             this.portModule2.Name = "portModule2";
@@ -77,13 +85,14 @@ namespace SOP.ComService
             this.portModule2.stopbit = System.IO.Ports.StopBits.One;
             this.portModule2.TabIndex = 1;
             this.portModule2.userId = 0;
-            this.portModule2.userName = null;
+            this.portModule2.userName = "";
             // 
             // portModule3
             // 
             this.portModule3.autoStart = false;
             this.portModule3.baudrate = 9600;
             this.portModule3.BoxName = "Kênh 3";
+            this.portModule3.comPort = "";
             this.portModule3.databit = 8;
             this.portModule3.Location = new System.Drawing.Point(570, 12);
             this.portModule3.Name = "portModule3";
@@ -92,13 +101,14 @@ namespace SOP.ComService
             this.portModule3.stopbit = System.IO.Ports.StopBits.One;
             this.portModule3.TabIndex = 1;
             this.portModule3.userId = 0;
-            this.portModule3.userName = null;
+            this.portModule3.userName = "";
             // 
             // portModule4
             // 
             this.portModule4.autoStart = false;
             this.portModule4.baudrate = 9600;
             this.portModule4.BoxName = "Kênh 4";
+            this.portModule4.comPort = "";
             this.portModule4.databit = 8;
             this.portModule4.Location = new System.Drawing.Point(12, 217);
             this.portModule4.Name = "portModule4";
@@ -107,13 +117,14 @@ namespace SOP.ComService
             this.portModule4.stopbit = System.IO.Ports.StopBits.One;
             this.portModule4.TabIndex = 1;
             this.portModule4.userId = 0;
-            this.portModule4.userName = null;
+            this.portModule4.userName = "";
             // 
             // portModule5
             // 
             this.portModule5.autoStart = false;
             this.portModule5.baudrate = 9600;
             this.portModule5.BoxName = "Kênh 5";
+            this.portModule5.comPort = "";
             this.portModule5.databit = 8;
             this.portModule5.Location = new System.Drawing.Point(291, 217);
             this.portModule5.Name = "portModule5";
@@ -122,13 +133,14 @@ namespace SOP.ComService
             this.portModule5.stopbit = System.IO.Ports.StopBits.One;
             this.portModule5.TabIndex = 1;
             this.portModule5.userId = 0;
-            this.portModule5.userName = null;
+            this.portModule5.userName = "";
             // 
             // portModule6
             // 
             this.portModule6.autoStart = false;
             this.portModule6.baudrate = 9600;
             this.portModule6.BoxName = "Kênh 6";
+            this.portModule6.comPort = "";
             this.portModule6.databit = 8;
             this.portModule6.Location = new System.Drawing.Point(570, 217);
             this.portModule6.Name = "portModule6";
@@ -137,7 +149,7 @@ namespace SOP.ComService
             this.portModule6.stopbit = System.IO.Ports.StopBits.One;
             this.portModule6.TabIndex = 1;
             this.portModule6.userId = 0;
-            this.portModule6.userName = null;
+            this.portModule6.userName = "";
             // 
             // label1
             // 
@@ -150,6 +162,35 @@ namespace SOP.ComService
             this.label1.TabIndex = 2;
             this.label1.Text = "Trung tâm CNTT&&TT Lào Cai\r\nSđt hỗ trợ: 02143841889";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // trayIcon
+            // 
+            this.trayIcon.ContextMenuStrip = this.contextMenuStrip1;
+            this.trayIcon.Text = "ComService";
+            this.trayIcon.Visible = true;
+            this.trayIcon.DoubleClick += new System.EventHandler(this.trayIcon_DoubleClick);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnShow,
+            this.btnExit});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(137, 48);
+            // 
+            // btnShow
+            // 
+            this.btnShow.Name = "btnShow";
+            this.btnShow.Size = new System.Drawing.Size(180, 22);
+            this.btnShow.Text = "Hiện cửa sổ";
+            this.btnShow.Click += new System.EventHandler(this.btnShow_Click);
+            // 
+            // btnExit
+            // 
+            this.btnExit.Name = "btnExit";
+            this.btnExit.Size = new System.Drawing.Size(180, 22);
+            this.btnExit.Text = "Thoát";
+            this.btnExit.Click += new System.EventHandler(this.btnExit_Click);
             // 
             // frmMain
             // 
@@ -168,7 +209,9 @@ namespace SOP.ComService
             this.Name = "frmMain";
             this.Text = "ComService";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMain_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.frmMain_FormClosed);
             this.Load += new System.EventHandler(this.frmMain_Load);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -184,6 +227,10 @@ namespace SOP.ComService
         private Controls.PortModule portModule5;
         private Controls.PortModule portModule6;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.NotifyIcon trayIcon;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem btnShow;
+        private System.Windows.Forms.ToolStripMenuItem btnExit;
     }
 }
 

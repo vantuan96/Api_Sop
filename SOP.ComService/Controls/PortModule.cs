@@ -115,7 +115,7 @@ namespace SOP.ComService.Controls
             chkAuto.Enabled = isEnabled;
             btnTest.Enabled = isEnabled;
 
-            btnStart.Text = isEnabled ? "Khởi động" : "Dừng";
+            btnStart.Text = isEnabled ? "Kết nối" : "Ngắt kết nối";
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
