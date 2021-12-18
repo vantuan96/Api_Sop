@@ -172,6 +172,8 @@ namespace SOP.ComService
                 autoLoginTimer.Elapsed -= AutoLoginTimer_Elapsed;
                 chkAuto.Text = "Tự động đăng nhập";
             }
+
+            StaticFields.isAutorun = chkAuto.Checked;
         }
     }
 }

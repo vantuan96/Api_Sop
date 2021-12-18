@@ -69,9 +69,9 @@
             this.chkAuto.AutoSize = true;
             this.chkAuto.Location = new System.Drawing.Point(116, 127);
             this.chkAuto.Name = "chkAuto";
-            this.chkAuto.Size = new System.Drawing.Size(119, 24);
+            this.chkAuto.Size = new System.Drawing.Size(137, 24);
             this.chkAuto.TabIndex = 3;
-            this.chkAuto.Text = "Tự khởi động";
+            this.chkAuto.Text = "Tự động kết nối";
             this.chkAuto.UseVisualStyleBackColor = true;
             // 
             // txtUsername
