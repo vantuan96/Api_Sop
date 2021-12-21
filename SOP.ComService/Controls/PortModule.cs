@@ -82,6 +82,10 @@ namespace SOP.ComService.Controls
                         var _portToRemove = listPort.FirstOrDefault(p => p == port);
                         if (_portToRemove != null)
                             listPort.Remove(_portToRemove);
+
+                        if (_portToRemove == comPort && serialPort != null && serialPort.IsOpen)
+                            btnStart.PerformClick();
+
                     }));
                 }
             }

@@ -21,7 +21,7 @@ namespace SOP.ComService
         public frmLogin()
         {
             InitializeComponent();
-            this.Icon = Properties.Resources._6074_brainstorm_bulb_idea_jabber_light_icon;
+            this.Icon = Properties.Resources.laocai_icon_removebg;
             this.DialogResult = DialogResult.OK;
             autoLoginTimer = new System.Timers.Timer()
             {

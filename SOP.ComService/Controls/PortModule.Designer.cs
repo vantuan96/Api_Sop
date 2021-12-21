@@ -87,7 +87,7 @@
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(125, 28);
             this.btnStart.TabIndex = 0;
-            this.btnStart.Text = "Khởi động";
+            this.btnStart.Text = "Kết nối";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 

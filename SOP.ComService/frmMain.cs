@@ -23,8 +23,8 @@ namespace SOP.ComService
         public frmMain()
         {
             InitializeComponent();
-            this.Icon = Properties.Resources._6074_brainstorm_bulb_idea_jabber_light_icon;
-            this.trayIcon.Icon = Properties.Resources._6074_brainstorm_bulb_idea_jabber_light_icon;
+            this.Icon = Properties.Resources.laocai_icon_removebg;
+            this.trayIcon.Icon = Properties.Resources.laocai_icon_removebg;
             Init();
         }
 

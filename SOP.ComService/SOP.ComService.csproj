@@ -33,7 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\6074_brainstorm_bulb_idea_jabber_light_icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\laocai_icon-removebg.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -132,6 +132,9 @@
       <Project>{864B4F75-317D-4C6A-B5BF-267B4DFC61C8}</Project>
       <Name>SOP.Shared</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\laocai_icon-removebg.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
