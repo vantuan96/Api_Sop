@@ -94,7 +94,7 @@ namespace SOP.ComService
                 else
                 {
                     Log.Information("Login Failed");
-                    MessageBox.Show(report.Message);
+                    MessageBox.Show("Login Failed");
                 }
             }
         }

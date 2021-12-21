@@ -28,6 +28,7 @@ namespace SOP.ComService.Controls
 
         private SerialPort serialPort;
         private BindingList<string> listPort = new BindingList<string>();
+        private bool isRunning = false;
 
         public int userId { get; set; }
         public string userName { get => txtUsername.Text; set => txtUsername.Text = value; }
@@ -79,13 +80,16 @@ namespace SOP.ComService.Controls
                 {
                     this.Invoke(new Action(() =>
                     {
+                        var _currentPort = comPort;
                         var _portToRemove = listPort.FirstOrDefault(p => p == port);
+
                         if (_portToRemove != null)
-                            listPort.Remove(_portToRemove);
+                        {
+                            if (_portToRemove == _currentPort && serialPort != null && isRunning)
+                                btnStart.PerformClick();
+                        }
 
-                        if (_portToRemove == comPort && serialPort != null && serialPort.IsOpen)
-                            btnStart.PerformClick();
-
+                        listPort.Remove(_portToRemove);
                     }));
                 }
             }
@@ -120,6 +124,8 @@ namespace SOP.ComService.Controls
             btnTest.Enabled = isEnabled;
 
             btnStart.Text = isEnabled ? "Kết nối" : "Ngắt kết nối";
+
+            isRunning = !isEnabled;
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -167,21 +173,19 @@ namespace SOP.ComService.Controls
         {
             var result = new TextResultEventArg();
 
-            var port = cbComPort.SelectedItem.ToString();
-
             SerialPort testserialPort = new SerialPort();
 
             try
             {
-                testserialPort = new SerialPort(port, baudrate, parity, databit, stopbit);
+                testserialPort = new SerialPort(comPort, baudrate, parity, databit, stopbit);
                 testserialPort.Open();
-                string message = $"[{groupBox1.Text}]Kiểm tra kết nối thành công ({port})";
+                string message = $"[{groupBox1.Text}]Kiểm tra kết nối thành công ({comPort})";
                 result.Message = message;
                 result.Succeeded = true;
             }
             catch (Exception)
             {
-                string message = $"[{groupBox1.Text}]Kiểm tra kết nối thất bại ({port}) ";
+                string message = $"[{groupBox1.Text}]Kiểm tra kết nối thất bại ({comPort}) ";
                 result.Message = message;
             }
             finally
@@ -199,7 +203,7 @@ namespace SOP.ComService.Controls
         {
             var result = new TextResultEventArg();
 
-            if (serialPort != null && serialPort.IsOpen)
+            if (serialPort != null && (serialPort.IsOpen|| isRunning))
             {
                 serialPort.Close();
                 serialPort.DataReceived -= SerialPort_DataReceived;
@@ -211,13 +215,11 @@ namespace SOP.ComService.Controls
             }
             else
             {
-                var port = cbComPort.SelectedItem.ToString();
-
                 serialPort = new SerialPort();
 
                 try
                 {
-                    serialPort = new SerialPort(port, baudrate, parity, databit, stopbit);
+                    serialPort = new SerialPort(comPort, baudrate, parity, databit, stopbit);
                     serialPort.DataReceived += SerialPort_DataReceived;
                     serialPort.Open();
 
